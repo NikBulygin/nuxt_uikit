@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@nuxt/test-utils/module'],
+  modules: [
+    '@nuxtjs/i18n',
+    '@nuxt/test-utils/module',
+    '@nuxtjs/tailwindcss',
+  ],
   i18n: {
     langDir: 'locales',
     defaultLocale: 'ru',
