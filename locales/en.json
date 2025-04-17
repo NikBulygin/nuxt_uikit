@@ -1,0 +1,21 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contacts": "Contacts",
+    "services": "Services"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "readMore": "Read more",
+    "send": "Send",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password"
+  }
+} 
