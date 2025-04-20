@@ -23,6 +23,30 @@ module.exports = {
         h6: ['1rem', { lineHeight: '1.5rem', fontWeight: '500' }]
       },
       colors: {
+        // Стандартные цвета для доступа через короткие имена
+        primary: {
+          DEFAULT: '#8b5cf6', // Основной цвет (соответствует light-primary-500)
+          50: '#f5f3ff',
+          100: '#ede9fe',
+          200: '#ddd6fe',
+          300: '#c4b5fd',
+          400: '#a78bfa',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
+          950: '#2e1065'
+        },
+        background: '#ffffff',
+        surface: '#f8fafc',
+        text: {
+          primary: '#171717',
+          secondary: '#404040',
+          tertiary: '#737373'
+        },
+        border: '#e5e5e5',
+
         // Светлая тема
         light: {
           primary: {

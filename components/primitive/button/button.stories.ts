@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 
-import button from './button.vue'
+import myButton from './button.vue'
 
 // More on how to set up stories at: https://storybook.js.org/docs/vue/writing-stories/introduction
 
 const meta = {
   title: 'Primitive/Button',
-  component: button,
+  component: myButton,
   // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
   tags: ['autodocs']
-} satisfies Meta<typeof button>
+} satisfies Meta<typeof myButton>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -21,7 +21,7 @@ export const Default: Story = {
   },
   // Используем render функцию для отображения слота
   render: args => ({
-    components: { button },
+    components: { myButton },
     setup() {
       // Добавляем обработчик клика с alert
       const onButtonClick = () => {
@@ -30,6 +30,6 @@ export const Default: Story = {
 
       return { args, onButtonClick }
     },
-    template: `<button v-bind="args" @click="onButtonClick">{{ args.default }}</button>`
+    template: `<myButton v-bind="args" class="bg-red" @click="onButtonClick">{{ args.default }}</myButton>`
   })
 }

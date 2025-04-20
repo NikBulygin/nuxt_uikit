@@ -6,8 +6,9 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/test-utils/module',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/storybook',
+    '@nuxtjs/storybook'
   ],
+  css: ['@/assets/css/main.css'],
   i18n: {
     langDir: 'locales',
     defaultLocale: 'ru',
@@ -42,5 +43,5 @@ export default defineNuxtConfig({
     vueI18n: './i18n.config.ts',
     lazy: true,
     skipSettingLocaleOnNavigate: false
-  },
+  }
 })
