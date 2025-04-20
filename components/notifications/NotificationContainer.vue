@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-h-[80vh] overflow-y-auto"
+    class="fixed bottom-0 sm:bottom-4 right-0 sm:right-4 z-50 flex flex-col gap-2 max-h-[90vh] sm:max-h-[80vh] overflow-y-auto p-2 sm:p-0 w-full sm:w-auto"
   >
     <Message
       v-for="(notification, index) in notificationStore.notifications"
@@ -47,5 +47,13 @@ const getOpacityStyle = (index: number, total: number) => {
 <style scoped>
 .notification-item {
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .notification-item {
+    width: 100%;
+    border-radius: 0;
+    margin-bottom: 1px;
+  }
 }
 </style>

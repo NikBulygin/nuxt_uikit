@@ -4,27 +4,42 @@
       v-if="visible"
       @click="close"
       :class="[
-        'px-4 py-3 rounded-lg shadow-lg transition-all duration-300 max-w-md cursor-pointer',
+        'px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-lg transition-all duration-300 cursor-pointer w-full sm:max-w-md',
         typeClasses
       ]"
     >
       <div class="flex items-center">
-        <div class="mr-3">
-          <IconInfo v-if="type === 'info'" class="w-5 h-5" />
-          <IconSuccess v-else-if="type === 'success'" class="w-5 h-5" />
-          <IconWarning v-else-if="type === 'warning'" class="w-5 h-5" />
-          <IconDanger v-else-if="type === 'danger'" class="w-5 h-5" />
+        <div class="mr-2 sm:mr-3 flex-shrink-0">
+          <IconInfo v-if="type === 'info'" class="w-4 h-4 sm:w-5 sm:h-5" />
+          <IconSuccess
+            v-else-if="type === 'success'"
+            class="w-4 h-4 sm:w-5 sm:h-5"
+          />
+          <IconWarning
+            v-else-if="type === 'warning'"
+            class="w-4 h-4 sm:w-5 sm:h-5"
+          />
+          <IconDanger
+            v-else-if="type === 'danger'"
+            class="w-4 h-4 sm:w-5 sm:h-5"
+          />
         </div>
-        <div class="flex-1">
-          <p v-if="title" class="font-semibold mb-1">{{ title }}</p>
+        <div class="flex-1 text-sm sm:text-base">
+          <p v-if="title" class="font-semibold mb-0.5 sm:mb-1">
+            {{ title }}
+          </p>
           <p>{{ message }}</p>
         </div>
         <button
           @click.stop="close"
-          class="ml-2 text-current opacity-70 hover:opacity-100"
+          class="ml-2 text-current opacity-70 hover:opacity-100 flex-shrink-0"
         >
           <span class="sr-only">Закрыть</span>
-          <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+          <svg
+            class="w-3 h-3 sm:w-4 sm:h-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
             <path
               fill-rule="evenodd"
               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -35,7 +50,7 @@
       </div>
       <div
         v-if="timer > 0"
-        class="mt-2 w-full bg-black/10 dark:bg-white/10 h-1 rounded-full overflow-hidden"
+        class="mt-1.5 sm:mt-2 w-full bg-black/10 dark:bg-white/10 h-0.5 sm:h-1 rounded-full overflow-hidden"
       >
         <div
           class="h-full bg-current opacity-60"
@@ -141,5 +156,13 @@ onBeforeUnmount(() => {
 .message-slide-leave-to {
   transform: translateX(30px);
   opacity: 0;
+}
+
+@media (max-width: 640px) {
+  .message-slide-enter-from,
+  .message-slide-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
 }
 </style>

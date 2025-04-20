@@ -1,14 +1,31 @@
 <template>
-  <div class="p-4 space-y-4">
-    <h2 class="text-xl font-semibold">Примеры уведомлений</h2>
-    <div class="flex flex-wrap gap-4">
-      <Button @click="showInfoNotification">Информация</Button>
-      <Button @click="showSuccessNotification">Успех</Button>
-      <Button @click="showWarningNotification">Предупреждение</Button>
-      <Button @click="showDangerNotification">Ошибка</Button>
-      <Button @click="showWithoutTitle">Без заголовка</Button>
-      <Button @click="showLongTimer">Долгий таймер (10с)</Button>
-      <Button @click="showNoTimer">Без таймера</Button>
+  <div class="p-2 sm:p-4 space-y-3 sm:space-y-4">
+    <h2 class="text-lg sm:text-xl font-semibold">Примеры уведомлений</h2>
+    <div class="flex flex-wrap gap-2 sm:gap-4">
+      <Button class="text-sm sm:text-base" @click="showInfoNotification"
+        >Информация</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showSuccessNotification"
+        >Успех</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showWarningNotification"
+        >Предупреждение</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showDangerNotification"
+        >Ошибка</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showWithoutTitle"
+        >Без заголовка</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showLongTimer"
+        >Долгий таймер (10с)</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showNoTimer"
+        >Без таймера</Button
+      >
+      <Button class="text-sm sm:text-base" @click="showMultiple"
+        >Несколько сразу</Button
+      >
     </div>
   </div>
 </template>
@@ -59,5 +76,18 @@ const showNoTimer = () => {
     'Без таймера',
     0
   )
+}
+
+const showMultiple = () => {
+  notification.info('Первое информационное сообщение', 'Инфо 1', 3000)
+  setTimeout(() => {
+    notification.success('Второе сообщение об успехе', 'Успех 2', 4000)
+  }, 300)
+  setTimeout(() => {
+    notification.warning('Третье предупреждение', 'Внимание 3', 5000)
+  }, 600)
+  setTimeout(() => {
+    notification.danger('Четвертое сообщение об ошибке', 'Ошибка 4', 6000)
+  }, 900)
 }
 </script>
