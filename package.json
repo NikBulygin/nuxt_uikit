@@ -11,10 +11,13 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "playwright:install": "playwright install chromium"
+    "playwright:install": "playwright install chromium",
+    "storybook": "storybook dev --port 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@nuxtjs/i18n": "9.5.3",
+    "@nuxtjs/storybook": "8.3.3",
     "@nuxtjs/tailwindcss": "6.13.2",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",
@@ -28,6 +31,17 @@
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^17.4.4",
     "playwright-core": "^1.51.1",
-    "vitest": "^1.x.x"
+    "vitest": "^1.x.x",
+    "storybook": "8.0.8",
+    "@types/node": "^18.17.5",
+    "@storybook/vue3": "8.0.8",
+    "@storybook-vue/nuxt": "0.2.6",
+    "@nuxtjs/storybook": "7.0.2",
+    "@storybook/addon-links": "8.0.8",
+    "@storybook/builder-vite": "8.0.8",
+    "@storybook/addon-essentials": "8.0.8",
+    "@storybook/addon-interactions": "8.0.8",
+    "@storybook/test": "8.0.8",
+    "@storybook/blocks": "8.0.8"
   }
 }

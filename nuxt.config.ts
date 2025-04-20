@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/test-utils/module',
     '@nuxtjs/tailwindcss',
+    '@nuxtjs/storybook',
   ],
   i18n: {
     langDir: 'locales',
