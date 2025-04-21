@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WagonData {
+  id            Int       @id @default(autoincrement())
+  wagonNumber   String
+  weight        Float
+  tio2          Float
+  h2o           Float
+  recalculation Float     @default(0)
+  totalWeight   Float     @default(0)
+  invoiceNumber String
+  invoiceDate   DateTime
+  gtdNumber     String
+  gtdDate       DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([invoiceNumber])
+  @@index([invoiceDate])
+  @@index([gtdNumber])
+}
+
+// For test purposes
+model TestWagonData {
+  id            Int       @id @default(autoincrement())
+  wagonNumber   String
+  weight        Float
+  tio2          Float
+  h2o           Float
+  recalculation Float     @default(0)
+  totalWeight   Float     @default(0)
+  invoiceNumber String
+  invoiceDate   DateTime
+  gtdNumber     String
+  gtdDate       DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+} 

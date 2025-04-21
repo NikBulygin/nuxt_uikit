@@ -303,6 +303,7 @@ interface DateProps {
   validateOnInput?: boolean
   helperText?: string
   showNotificationOnError?: boolean
+  monthYearOnly?: boolean
 }
 
 const props = withDefaults(defineProps<DateProps>(), {
@@ -312,7 +313,8 @@ const props = withDefaults(defineProps<DateProps>(), {
   required: false,
   disabled: false,
   validateOnInput: false,
-  showNotificationOnError: false
+  showNotificationOnError: false,
+  monthYearOnly: false
 })
 
 const emit = defineEmits([
@@ -433,17 +435,20 @@ const calendarDaysNextMonth = computed(() => {
   return getDaysInMonth(year, month)
 })
 
-// Display value formatted according to the specified format
+// Modify display value computation for month-year mode
 const displayValue = computed(() => {
+  if (props.monthYearOnly) {
+    if (selectedDate.value) {
+      return formatMonthYear(selectedDate.value)
+    }
+    return inputValue.value
+  }
+  
   if (props.range) {
     if (selectedStartDate.value && selectedEndDate.value) {
-      return `${formatDate(selectedStartDate.value)} - ${formatDate(
-        selectedEndDate.value
-      )}`
+      return `${formatDate(selectedStartDate.value)} - ${formatDate(selectedEndDate.value)}`
     } else if (selectedStartDate.value) {
-      return `${formatDate(selectedStartDate.value)} - ${
-        props.placeholder || formatHint.value
-      }`
+      return `${formatDate(selectedStartDate.value)} - ${props.placeholder || formatHint.value}`
     }
     return inputValue.value
   } else {
@@ -992,4 +997,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
 })
+
+// Add month-year formatting function
+function formatMonthYear(date: Date): string {
+  if (!date) return ''
+  return `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+}
 </script>
