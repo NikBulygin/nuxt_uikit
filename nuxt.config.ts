@@ -40,7 +40,7 @@ export default defineNuxtConfig({
       }
     ],
     strategy: 'prefix_and_default',
-    vueI18n: './i18n/i18n.config.ts',
+    vueI18n: './i18n.config.ts',
     lazy: true,
     skipSettingLocaleOnNavigate: false
   }
