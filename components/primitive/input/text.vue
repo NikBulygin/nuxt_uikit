@@ -20,7 +20,6 @@
         :value="inputValue"
         :placeholder="placeholder"
         :maxlength="maxLength || undefined"
-        :pattern="pattern"
         :required="required"
         :disabled="disabled"
         :rows="multiline ? rows : undefined"
@@ -73,13 +72,12 @@
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useNotification } from '~/composables/useNotification'
 
-// Common validation patterns
+// Обновим паттерны валидации, экранируя специальные символы для HTML pattern атрибута
 const VALIDATION_PATTERNS = {
   // Basic email pattern
   EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   // Password with at least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-  STRONG_PASSWORD:
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  STRONG_PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   // Password with at least 8 characters
   BASIC_PASSWORD: /^.{8,}$/,
   // Numbers only
@@ -120,31 +118,13 @@ const props = defineProps({
     type: String,
     default: () => `input-${Math.random().toString(36).substring(2, 9)}`
   },
-  // Either a RegExp object, a string pattern, or a predefined validation type
   validationType: {
     type: String as () => ValidationType,
     default: 'custom'
   },
   regex: {
-    type: [RegExp, String],
-    default: null,
-    validator: (value: RegExp | string | null) => {
-      if (value === null) return true
-
-      if (typeof value === 'string') {
-        try {
-          new RegExp(value)
-          return true
-        } catch (e) {
-          console.error('Invalid regex pattern provided:', e)
-          return false
-        }
-      }
-
-      if (value instanceof RegExp) return true
-
-      return false
-    }
+    type: RegExp,
+    default: null
   },
   hideText: {
     type: Boolean,
@@ -189,7 +169,7 @@ const props = defineProps({
   },
   validationDelay: {
     type: Number,
-    default: 1500, // 1.5 seconds delay
+    default: 1500,
     validator: (value: number) => value >= 0
   },
   showNotificationOnError: {
@@ -219,43 +199,19 @@ const notification = useNotification()
 // Debounce timer
 let validationTimer: ReturnType<typeof setTimeout> | null = null
 
-// Get appropriate regex pattern based on validationType or custom regex
+// Обновляем компонент для работы с RegExp
 const regexPattern = computed(() => {
-  // First priority: check for predefined validation type
+  // Если указан тип валидации, используем предопределенный паттерн
   if (props.validationType && props.validationType !== 'custom') {
-    switch (props.validationType) {
-      case 'email':
-        return VALIDATION_PATTERNS.EMAIL
-      case 'strongPassword':
-        return VALIDATION_PATTERNS.STRONG_PASSWORD
-      case 'basicPassword':
-        return VALIDATION_PATTERNS.BASIC_PASSWORD
-      case 'numbersOnly':
-        return VALIDATION_PATTERNS.NUMBERS_ONLY
-      case 'lettersOnly':
-        return VALIDATION_PATTERNS.LETTERS_ONLY
-      case 'url':
-        return VALIDATION_PATTERNS.URL
-      case 'phone':
-        return VALIDATION_PATTERNS.PHONE
-      default:
-        // For safety, should never reach here due to type constraints
-        return null
-    }
+    return VALIDATION_PATTERNS[props.validationType]
   }
-
-  // Second priority: custom regex from props
-  if (!props.regex) return null
-
-  try {
-    if (typeof props.regex === 'string') {
-      return new RegExp(props.regex)
-    }
+  
+  // Если указан кастомный regex, используем его
+  if (props.regex) {
     return props.regex
-  } catch (e) {
-    console.error('Error creating RegExp from provided pattern:', e)
-    return null
   }
+  
+  return null
 })
 
 // Get default error message based on validation type
@@ -283,15 +239,17 @@ const defaultErrorMessage = computed(() => {
   return props.errorMessage
 })
 
-// Computed regex pattern for HTML5 validation
+// Обновим computed свойство для pattern
 const pattern = computed(() => {
   if (!regexPattern.value) return undefined
 
   try {
-    // Extract the pattern string from the RegExp object
+    // Получаем строку паттерна
     const patternStr = regexPattern.value.toString()
-    // Remove the leading / and trailing /flags
-    return patternStr.substring(1, patternStr.lastIndexOf('/'))
+    // Убираем начальный и конечный слэши и флаги
+    const cleanPattern = patternStr.slice(1, patternStr.lastIndexOf('/'))
+    // Для HTML pattern атрибута не нужно экранировать некоторые символы
+    return cleanPattern
   } catch (e) {
     console.error('Error extracting pattern string:', e)
     return undefined
