@@ -63,21 +63,21 @@
         <p class="text-text-secondary dark:text-dark-text-secondary mb-1">
           {{
             isDragging
-              ? 'Drop files here'
-              : 'Drag and drop files here or click to browse'
+              ? t('fileInput.dragActive')
+              : t('fileInput.dragAndDrop')
           }}
         </p>
         <p
           v-if="acceptedFileTypes"
           class="text-xs text-text-tertiary dark:text-dark-text-tertiary"
         >
-          Accepted file types: {{ formatAcceptedTypes }}
+          {{ t('fileInput.acceptedTypes', { types: formatAcceptedTypes }) }}
         </p>
         <p
           v-if="maxSize"
           class="text-xs text-text-tertiary dark:text-dark-text-tertiary"
         >
-          Maximum file size: {{ formatFileSize(maxSize) }}
+          {{ t('fileInput.maxSize', { size: formatFileSize(maxSize) }) }}
         </p>
       </div>
 
@@ -157,7 +157,7 @@
               v-if="!disabled"
               @click.stop="removeFile(index)"
               class="text-text-tertiary hover:text-danger p-1 rounded-full"
-              aria-label="Remove file"
+              :aria-label="t('fileInput.aria.removeFile')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -181,13 +181,13 @@
             @click.stop="clearFiles"
             class="text-sm text-danger hover:underline mr-2"
           >
-            Clear All
+            {{ t('fileInput.actions.clearAll') }}
           </button>
           <button
             @click.stop=";(fileInput as HTMLInputElement).click()"
             class="text-sm text-primary hover:underline"
           >
-            {{ multiple ? 'Add More Files' : 'Change File' }}
+            {{ multiple ? t('fileInput.actions.addMore') : t('fileInput.actions.changeFile') }}
           </button>
         </div>
       </div>
@@ -219,6 +219,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useNotification } from '~/composables/useNotification'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   modelValue: {
@@ -278,6 +279,9 @@ const fileInput = ref<HTMLInputElement | null>(null)
 
 // Notification service
 const notification = useNotification()
+
+// Add i18n
+const { t } = useI18n()
 
 // Format accepted file types for display
 const formatAcceptedTypes = computed(() => {
@@ -371,7 +375,7 @@ const handleFiles = (fileList: FileList) => {
     if (!props.multiple && files.value.length > 0) {
       if (props.showNotificationOnError) {
         notification.warning(
-          'Only one file can be uploaded',
+          t('fileInput.validation.required'),
           'Validation Error'
         )
       }
@@ -380,7 +384,7 @@ const handleFiles = (fileList: FileList) => {
 
     // Validate file type if acceptedFileTypes is specified
     if (props.acceptedFileTypes && !isValidFileType(file)) {
-      error.value = `File type not allowed: ${file.name}`
+      error.value = t('fileInput.validation.fileType', { filename: file.name })
       emit('error', error.value)
 
       if (props.showNotificationOnError) {
@@ -391,9 +395,10 @@ const handleFiles = (fileList: FileList) => {
 
     // Validate file size if maxSize is specified
     if (props.maxSize && file.size > props.maxSize) {
-      error.value = `File too large: ${file.name} (${formatFileSize(
-        file.size
-      )})`
+      error.value = t('fileInput.validation.fileSize', {
+        filename: file.name,
+        size: formatFileSize(file.size)
+      })
       emit('error', error.value)
 
       if (props.showNotificationOnError) {
@@ -470,10 +475,11 @@ const clearFiles = () => {
 // Validate if files meet requirements
 const validateFiles = () => {
   error.value = ''
+  isValid.value = false
 
   // Check required field
   if (props.required && files.value.length === 0) {
-    error.value = 'Please select at least one file'
+    error.value = t('fileInput.validation.required')
     emit('error', error.value)
     return
   }

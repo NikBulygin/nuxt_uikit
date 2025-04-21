@@ -71,6 +71,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useNotification } from '~/composables/useNotification'
+import { useI18n } from 'vue-i18n'
 
 // Обновим паттерны валидации, экранируя специальные символы для HTML pattern атрибута
 const VALIDATION_PATTERNS = {
@@ -198,6 +199,8 @@ const isValid = ref(true)
 const notification = useNotification()
 // Debounce timer
 let validationTimer: ReturnType<typeof setTimeout> | null = null
+// Translation function
+const { t } = useI18n()
 
 // Обновляем компонент для работы с RegExp
 const regexPattern = computed(() => {
@@ -217,26 +220,9 @@ const regexPattern = computed(() => {
 // Get default error message based on validation type
 const defaultErrorMessage = computed(() => {
   if (props.validationType && props.validationType !== 'custom') {
-    switch (props.validationType) {
-      case 'email':
-        return 'Please enter a valid email address'
-      case 'strongPassword':
-        return 'Password must be at least 8 characters and include uppercase, lowercase, number and special character'
-      case 'basicPassword':
-        return 'Password must be at least 8 characters'
-      case 'numbersOnly':
-        return 'Please enter numbers only'
-      case 'lettersOnly':
-        return 'Please enter letters only'
-      case 'url':
-        return 'Please enter a valid URL'
-      case 'phone':
-        return 'Please enter a valid phone number'
-      default:
-        return props.errorMessage
-    }
+    return t(`textInput.validation.${props.validationType}`)
   }
-  return props.errorMessage
+  return props.errorMessage || t('textInput.validation.default')
 })
 
 // Обновим computed свойство для pattern
@@ -302,12 +288,12 @@ const validateInput = () => {
 
   // First validate required state - only if the field is actually empty
   if (props.required && currentValue.length === 0) {
-    error.value = 'This field is required'
+    error.value = t('textInput.validation.required')
     isValid.value = false
     emit('error', error.value)
 
     if (props.showNotificationOnError) {
-      notification.warning(error.value, 'Validation Error')
+      notification.warning(error.value, t('textInput.notifications.validationError'))
     }
     return
   }
@@ -332,7 +318,7 @@ const validateInput = () => {
         emit('error', error.value)
 
         if (props.showNotificationOnError) {
-          notification.warning(error.value, 'Validation Error')
+          notification.warning(error.value, t('textInput.notifications.validationError'))
         }
         return
       } else if (customResult === false) {
@@ -342,7 +328,7 @@ const validateInput = () => {
         emit('error', error.value)
 
         if (props.showNotificationOnError) {
-          notification.warning(error.value, 'Validation Error')
+          notification.warning(error.value, t('textInput.notifications.validationError'))
         }
         return
       }
@@ -361,13 +347,13 @@ const validateInput = () => {
         emit('error', error.value)
 
         if (props.showNotificationOnError) {
-          notification.warning(error.value, 'Validation Error')
+          notification.warning(error.value, t('textInput.notifications.validationError'))
         }
         return
       }
     } catch (e) {
       console.error('Error during regex validation:', e)
-      error.value = 'Validation error occurred'
+      error.value = t('textInput.validation.error')
       isValid.value = false
       emit('error', error.value)
       return

@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useNotification } from '~/composables/useNotification'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   modelValue: {
@@ -133,6 +134,8 @@ const error = ref('')
 const isValid = ref(true)
 // Notification composable
 const notification = useNotification()
+// Add i18n
+const { t } = useI18n()
 // Debounce timer
 let validationTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -186,7 +189,7 @@ const validateInput = () => {
 
   // Check required field
   if (props.required && inputValue.value === '') {
-    error.value = 'This field is required'
+    error.value = t('numberInput.validation.required')
     isValid.value = false
     emit('error', error.value)
 
@@ -201,7 +204,7 @@ const validateInput = () => {
 
   // Check if valid number
   if (isNaN(numValue)) {
-    error.value = 'Please enter a valid number'
+    error.value = t('numberInput.validation.invalidNumber')
     isValid.value = false
     emit('error', error.value)
 
@@ -213,7 +216,7 @@ const validateInput = () => {
 
   // Check min value
   if (props.min !== null && numValue < props.min) {
-    error.value = `Value must be at least ${props.min}`
+    error.value = t('numberInput.validation.minValue', { min: props.min })
     isValid.value = false
     emit('error', error.value)
 
@@ -225,7 +228,7 @@ const validateInput = () => {
 
   // Check max value
   if (props.max !== null && numValue > props.max) {
-    error.value = `Value must be at most ${props.max}`
+    error.value = t('numberInput.validation.maxValue', { max: props.max })
     isValid.value = false
     emit('error', error.value)
 

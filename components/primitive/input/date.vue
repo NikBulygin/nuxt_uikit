@@ -45,7 +45,7 @@
           class="p-2 mr-1 flex items-center text-text-tertiary hover:text-text-primary dark:text-dark-text-tertiary dark:hover:text-dark-text-primary"
           :class="{ 'opacity-50 cursor-not-allowed': disabled }"
           @click="handleCalendarClick"
-          aria-label="Toggle calendar"
+          :aria-label="t('datePicker.aria.toggleCalendar')"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -79,6 +79,7 @@
             type="button"
             class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
             @click="monthYearMode ? previousYear : previousMonth"
+            :aria-label="monthYearMode ? t('datePicker.aria.previousYear') : t('datePicker.aria.previousMonth')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -133,6 +134,7 @@
             type="button"
             class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
             @click="monthYearMode ? nextYear : nextMonth"
+            :aria-label="monthYearMode ? t('datePicker.aria.nextYear') : t('datePicker.aria.nextMonth')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +249,7 @@
             class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
             @click="monthYearMode ? selectCurrentMonth : selectToday"
           >
-            {{ monthYearMode ? 'Current' : 'Today' }}
+            {{ buttonTexts.today }}
           </button>
           <button
             v-if="(monthYearMode && selectedDate) || (!monthYearMode && (selectedDate || hoverDate))"
@@ -255,14 +257,14 @@
             class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
             @click="clearSelection"
           >
-            Clear
+            {{ buttonTexts.clear }}
           </button>
           <button
             type="button"
             class="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary-dark"
             @click="applySelection"
           >
-            Apply
+            {{ buttonTexts.apply }}
           </button>
         </div>
       </div>
@@ -294,6 +296,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useNotification } from '~/composables/useNotification'
+import { useI18n } from 'vue-i18n'
 import { withDefaults } from 'vue'
 
 type DateValue = Date | null
@@ -357,6 +360,9 @@ const isValid = ref(false)
 // Notification service
 const notification = useNotification()
 
+// Add i18n
+const { t } = useI18n()
+
 // Generate a stable ID based on component instance
 const componentId = ref(
   props.id || `date-input-${Date.now().toString(36)}`
@@ -400,23 +406,31 @@ const disabledDatesArray = computed(() => {
     .filter(Boolean) as Date[]
 })
 
-// Month and day names
+// Replace static month names with i18n
 const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
+  t('datePicker.months.january'),
+  t('datePicker.months.february'),
+  t('datePicker.months.march'),
+  t('datePicker.months.april'),
+  t('datePicker.months.may'),
+  t('datePicker.months.june'),
+  t('datePicker.months.july'),
+  t('datePicker.months.august'),
+  t('datePicker.months.september'),
+  t('datePicker.months.october'),
+  t('datePicker.months.november'),
+  t('datePicker.months.december')
 ]
 
-const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+// Replace static day names with i18n
+const dayNames = computed(() => t('datePicker.weekDays.short'))
+
+// Update template button texts
+const buttonTexts = computed(() => ({
+  today: props.monthYearMode ? t('datePicker.buttons.current') : t('datePicker.buttons.today'),
+  clear: t('datePicker.buttons.clear'),
+  apply: t('datePicker.buttons.apply')
+}))
 
 // Available years for the dropdown (from min date to max date, or ±10 years)
 const availableYears = computed(() => {
@@ -748,7 +762,7 @@ function selectToday() {
   const today = new Date()
 
   if (isDayDisabled(today)) {
-    error.value = 'Today is not available for selection'
+    error.value = t('datePicker.validation.todayNotAvailable')
     if (props.showNotificationOnError) {
       notification.warning(error.value, 'Date Selection')
     }
@@ -934,13 +948,13 @@ function validateInput() {
   if (props.required) {
     if (props.range) {
       if (!selectedStartDate.value || !selectedEndDate.value) {
-        error.value = 'Please select a date range'
+        error.value = t('datePicker.validation.requiredRange')
         emit('error', error.value)
         return
       }
     } else {
       if (!selectedDate.value) {
-        error.value = 'Please select a date'
+        error.value = t('datePicker.validation.required')
         emit('error', error.value)
         return
       }
@@ -948,7 +962,7 @@ function validateInput() {
   }
 
   if (inputValue.value && !selectedDate.value && !props.range) {
-    error.value = `Please enter a valid date in ${formatHint.value} format`
+    error.value = t('datePicker.validation.invalidFormat', { format: formatHint.value })
     emit('error', error.value)
     return
   }
@@ -958,7 +972,7 @@ function validateInput() {
     inputValue.value &&
     (!selectedStartDate.value || !selectedEndDate.value)
   ) {
-    error.value = `Please enter a valid date range in ${formatHint.value} format`
+    error.value = t('datePicker.validation.invalidRangeFormat', { format: formatHint.value })
     emit('error', error.value)
     return
   }

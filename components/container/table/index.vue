@@ -6,7 +6,7 @@
             <div class="flex items-center gap-4">
                 <!-- Items per page selector -->
                 <div class="flex items-center gap-2" :class="{ 'opacity-50 pointer-events-none': isEditMode }">
-                    <span class="text-sm text-gray-600 dark:text-gray-300">Rows per page:</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">{{ toolbarTexts.rowsPerPage }}:</span>
                     <select 
                         v-model="itemsPerPage" 
                         class="p-1 rounded border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700"
@@ -27,26 +27,26 @@
                         @click="deleteSelected"
                         class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                     >
-                        Delete
+                        {{ toolbarTexts.actions.delete }}
                     </button>
                     <button 
                         v-if="hasSelected"
                         @click="copySelected"
                         class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
-                        Copy
+                        {{ toolbarTexts.actions.copy }}
                     </button>
                     <button 
                         @click="cancelEdit"
                         class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
                     >
-                        Cancel
+                        {{ toolbarTexts.actions.cancel }}
                     </button>
                     <button 
                         @click="saveChanges"
                         class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                     >
-                        Save
+                        {{ toolbarTexts.actions.save }}
                     </button>
                 </template>
             </div>
@@ -58,7 +58,7 @@
                     @click="startEdit"
                     class="px-3 py-1 bg-primary-500 text-white rounded hover:bg-primary-600"
                 >
-                    Edit Mode
+                    {{ toolbarTexts.editMode }}
                 </button>
             </div>
         </div>
@@ -213,11 +213,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ContainerPagination from '~/components/container/pagination/index.vue'
 import InputText from '~/components/primitive/input/text.vue'
 import InputNumber from '~/components/primitive/input/number.vue'
 import InputFloat from '~/components/primitive/input/float.vue'
 import InputDate from '~/components/primitive/input/date.vue'
+
+const { t } = useI18n()
 
 interface ValidationMeta {
     required?: boolean
@@ -352,11 +355,11 @@ const cancelEdit = () => {
 }
 
 // Добавим новые методы для обработки валидации
-const handleValidationError = (rowIndex: number, columnKey: string, errorMessage: string) => {
+const handleValidationError = (rowIndex: number, columnKey: string, errorType: string, params?: any) => {
     if (!editedDataErrors.value[rowIndex]) {
         editedDataErrors.value[rowIndex] = {}
     }
-    editedDataErrors.value[rowIndex][columnKey] = errorMessage
+    editedDataErrors.value[rowIndex][columnKey] = getValidationMessage(errorType, params)
 }
 
 const clearValidationError = (rowIndex: number, columnKey: string) => {
@@ -578,6 +581,23 @@ const getValidationPattern = (validation?: ValidationMeta): RegExp | null => {
     }
     
     return null
+}
+
+// Update template text with translations
+const toolbarTexts = computed(() => ({
+  rowsPerPage: t('table.toolbar.rowsPerPage'),
+  editMode: t('table.toolbar.editMode'),
+  actions: {
+    delete: t('table.toolbar.actions.delete'),
+    copy: t('table.toolbar.actions.copy'),
+    cancel: t('table.toolbar.actions.cancel'),
+    save: t('table.toolbar.actions.save')
+  }
+}))
+
+// Update validation messages
+const getValidationMessage = (type: string, params?: any) => {
+  return t(`table.validation.${type}`, params)
 }
 </script>
 

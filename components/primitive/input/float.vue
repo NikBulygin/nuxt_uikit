@@ -71,6 +71,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useNotification } from '~/composables/useNotification'
+import { useI18n } from 'vue-i18n'
 
 // Display mode type
 type DisplayMode = 'full' | 'first' | 'last' | 'firstLast' | 'scientific'
@@ -156,6 +157,8 @@ const error = ref('')
 const isValid = ref(true)
 // Notification composable
 const notification = useNotification()
+// Add i18n
+const { t } = useI18n()
 // Debounce timer
 let validationTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -185,14 +188,16 @@ const formattedValue = computed(() => {
       return formatted
     }
 
+    const ellipsis = t('floatInput.display.ellipsis')
+
     // Handle first N digits
     if (props.displayMode === 'first') {
-      return formatted.slice(0, props.displayDigits) + '...'
+      return formatted.slice(0, props.displayDigits) + ellipsis
     }
 
     // Handle last N digits
     if (props.displayMode === 'last') {
-      return '...' + formatted.slice(-props.displayDigits)
+      return ellipsis + formatted.slice(-props.displayDigits)
     }
 
     // Handle first and last N digits
@@ -200,7 +205,7 @@ const formattedValue = computed(() => {
       const halfDigits = Math.floor(props.displayDigits / 2)
       return (
         formatted.slice(0, halfDigits) +
-        '...' +
+        ellipsis +
         formatted.slice(-halfDigits)
       )
     }
@@ -275,7 +280,7 @@ const validateInput = () => {
 
   // Check required field
   if (props.required && inputValue.value === '') {
-    error.value = 'This field is required'
+    error.value = t('floatInput.validation.required')
     isValid.value = false
     emit('error', error.value)
 
@@ -290,7 +295,7 @@ const validateInput = () => {
 
   // Check if valid number
   if (isNaN(numValue)) {
-    error.value = 'Please enter a valid number'
+    error.value = t('floatInput.validation.invalidNumber')
     isValid.value = false
     emit('error', error.value)
 
@@ -302,7 +307,7 @@ const validateInput = () => {
 
   // Check min value
   if (props.min !== null && numValue < props.min) {
-    error.value = `Value must be at least ${props.min}`
+    error.value = t('floatInput.validation.minValue', { min: props.min })
     isValid.value = false
     emit('error', error.value)
 
@@ -314,7 +319,7 @@ const validateInput = () => {
 
   // Check max value
   if (props.max !== null && numValue > props.max) {
-    error.value = `Value must be at most ${props.max}`
+    error.value = t('floatInput.validation.maxValue', { max: props.max })
     isValid.value = false
     emit('error', error.value)
 
