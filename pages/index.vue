@@ -1,13 +1,86 @@
 <template>
   <div>
+      <div>
+    <button v-for="locale in locales" @click="setLocale(locale.code)">
+      {{ locale.name }}
+    </button>
+    <h1>{{ $t('welcome') }}</h1>
+    
+      {{ $t('table.toolbar.editMode') }}
+  </div>
     <!-- Language selector -->
     <div class="mb-4">
-      <label class="block mb-2 text-sm font-medium">Select Language:</label>
+      <label class="block mb-2 text-sm font-medium">{{ t('language.select') }}</label>
       <select v-model="locale" class="p-2 border rounded">
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-        <option value="kz">Қазақша</option>
+        <option v-for="loc in availableLocales" :key="loc.code" :value="loc.code">
+          {{ loc.name }}
+        </option>
       </select>
+    </div>
+
+    <!-- Date picker examples -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Standard date picker -->
+      <div class="p-4 border rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Standard Date Picker</h3>
+        <date-input
+          v-model="standardDate"
+          label="Select Date"
+          date-format="DD.MM.YYYY"
+          :required="true"
+          :helper-text="'Standard date picker with DD.MM.YYYY format'"
+        />
+        <div class="mt-2 text-sm text-gray-600">
+          Selected value: {{ standardDate }}
+        </div>
+      </div>
+
+      <!-- Month-Year picker -->
+      <div class="p-4 border rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Month-Year Picker</h3>
+        <date-input
+          v-model="monthYearDate"
+          label="Select Month and Year"
+          date-format="MM/YYYY"
+          :month-year-mode="true"
+          :helper-text="'Month and year selection only'"
+        />
+        <div class="mt-2 text-sm text-gray-600">
+          Selected value: {{ monthYearDate }}
+        </div>
+      </div>
+
+      <!-- Date range picker -->
+      <div class="p-4 border rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Date Range Picker</h3>
+        <date-input
+          v-model="dateRange"
+          label="Select Date Range"
+          date-format="YYYY-MM-DD"
+          :range="true"
+          :helper-text="'Select start and end dates'"
+        />
+        <div class="mt-2 text-sm text-gray-600">
+          Start: {{ dateRange[0] }}<br>
+          End: {{ dateRange[1] }}
+        </div>
+      </div>
+
+      <!-- Date picker with min/max -->
+      <div class="p-4 border rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Date Picker with Constraints</h3>
+        <date-input
+          v-model="constrainedDate"
+          label="Select Date (Limited Range)"
+          date-format="DD/MM/YYYY"
+          :min-date="minDate"
+          :max-date="maxDate"
+          :helper-text="'Date selection limited to current month'"
+        />
+        <div class="mt-2 text-sm text-gray-600">
+          Selected value: {{ constrainedDate }}
+        </div>
+      </div>
     </div>
 
     <!-- Table component -->
@@ -28,11 +101,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DateInput from '~/components/primitive/input/date.vue'
+
+const { locales, setLocale, availableLocales } = useI18n()
 
 const { locale, t } = useI18n()
 const sorted = ref<{ key: string; direction: 'asc' | 'desc' } | undefined>()
+
+// Date picker examples data
+const standardDate = ref<Date | null>(null)
+const monthYearDate = ref<Date | null>(null)
+const dateRange = ref<[Date | null, Date | null]>([null, null])
+const constrainedDate = ref<Date | null>(null)
+
+// Min/Max dates for constrained picker
+const minDate = computed(() => {
+  const date = new Date()
+  date.setDate(1) // First day of current month
+  return date
+})
+
+const maxDate = computed(() => {
+  const date = new Date()
+  date.setMonth(date.getMonth() + 1, 0) // Last day of current month
+  return date
+})
 
 const meta = reactive({
   columns: [

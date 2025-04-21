@@ -1,191 +1,204 @@
 {
-  "welcome": "Welcome",
-  "datePicker": {
-    "months": {
-      "january": "January",
-      "february": "February",
-      "march": "March",
-      "april": "April",
-      "may": "May",
-      "june": "June",
-      "july": "July",
-      "august": "August",
-      "september": "September",
-      "october": "October",
-      "november": "November",
-      "december": "December"
-    },
-    "weekDays": {
-      "short": ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-    },
-    "buttons": {
-      "today": "Today",
-      "current": "Current",
-      "clear": "Clear",
-      "apply": "Apply"
-    },
-    "validation": {
-      "required": "Please select a date",
-      "requiredRange": "Please select a date range",
-      "invalidFormat": "Please enter a valid date in {format} format",
-      "invalidRangeFormat": "Please enter a valid date range in {format} format",
-      "todayNotAvailable": "Today is not available for selection"
-    },
-    "labels": {
-      "selectDate": "Select date",
-      "selectRange": "Select range"
-    },
-    "aria": {
-      "toggleCalendar": "Toggle calendar",
-      "previousMonth": "Previous month",
-      "nextMonth": "Next month",
-      "previousYear": "Previous year",
-      "nextYear": "Next year"
+"welcome": "Welcome",
+"language": {
+  "select": "Select Language"
+},
+"datePicker": {
+  "months": {
+"january": "January",
+"february": "February",
+"march": "March",
+    "april": "April",
+"may": "May",
+"june": "June",
+"july": "July",
+"august": "August",
+    "september": "September",
+"october": "October",
+"november": "November",
+"december": "December"
+  },
+  "weekDays": {
+"short": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "long": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+},
+  "buttons": {
+"today": "Today",
+"current": "Current",
+    "clear": "Clear",
+"apply": "Apply",
+"cancel": "Cancel"
+  },
+  "validation": {
+"required": "Please select a date",
+"requiredRange": "Please select a date range",
+    "invalidFormat": "Please enter the date in {format} format",
+"invalidRangeFormat": "Please enter the date range in {format} format",
+"todayNotAvailable": "Today's date is not available for selection",
+    "dateNotAvailable": "This date is not available for selection",
+    "minDate": "The date must be no earlier than {date}",
+"maxDate": "The date must be no later than {date}"
+  },
+  "labels": {
+"selectDate": "Select date",
+"selectRange": "Select range",
+    "StartDate": "Start date",
+    "EndDate": "End date",
+    "selected": "Selected"
+},
+  "aria": {
+"toggleCalendar": "Show/hide calendar",
+"previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "previousYear": "Previous year",
+    "nextYear": "Next year",
+    "selectDay": "Select a day",
+    "calendar": "Calendar"
+  }
+},
+"table": {
+  "toolbar": {
+    "rowsPerPage": "Rows on the page:",
+"editMode": "Edit mode",
+    "actions": {
+"delete": "Delete", 
+"copy": "Copy",
+"cancel": "Cancel",
+"save": "Save"
     }
   },
-  "table": {
-    "toolbar": {
-      "rowsPerPage": "Rows per page:",
-      "editMode": "Edit Mode",
-      "actions": {
-        "delete": "Delete",
-        "copy": "Copy",
-        "cancel": "Cancel",
-        "save": "Save"
-      }
+  "validation": {
+"required": "Required field",
+"minLength": "Minimum {n} characters",
+"maxLength": "Maximum {n} characters",
+"min": "Minimum value {n}",
+"max": "Maximum value {n}",
+"email": "Invalid email format",
+    "NumbersOnly": "Numbers only",
+"lettersOnly": "Letters only",
+"url": "Invalid URL format",
+"phone": "Invalid phone format"
+  },
+  "pagination": {
+"showing": "Shown",
+"to": "by",
+"of": "from",
+"entries": "entries",
+"previous": "Previous",
+"next": "Next",
+"page": "Page"
+  },
+  "NoData": "No data",
+"loading": "Loading...",
+"error": "Error occurred",
+"filters": {
+"apply": "Apply",
+"clear": "Clear",
+"title": "Filters"
+  },
+  "sort": {
+    "asc": "Ascending",
+    "desc": "Descending order"
+  }
+},
+"notifications": {
+"examples": {
+"title": "Notification examples",
+    "buttons": {
+"info": "Information",
+      "success": "Success",
+"warning": "Warning",
+"error": "Error",
+"noTitle": "Without header",
+"longTimer": "Long timer (10s)",
+"noTimer": "Without timer",
+      "multiple": "Multiple at once"
     },
-    "validation": {
-      "required": "Required field",
-      "minLength": "Minimum {n} characters",
-      "maxLength": "Maximum {n} characters",
-      "min": "Minimum value {n}",
-      "max": "Maximum value {n}",
-      "email": "Invalid email format",
-      "numbersOnly": "Numbers only",
-      "lettersOnly": "Letters only",
-      "url": "Invalid URL format",
-      "phone": "Invalid phone format"
-    },
-    "pagination": {
-      "showing": "Showing",
-      "to": "to",
-      "of": "of",
-      "entries": "entries",
-      "previous": "Previous",
-      "next": "Next",
-      "page": "Page"
-    },
-    "noData": "No data available",
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "filters": {
-      "apply": "Apply",
-      "clear": "Clear",
-      "title": "Filters"
-    },
-    "sort": {
-      "asc": "Sort ascending",
-      "desc": "Sort descending"
-    }
+    "messages": {
+"info": "This is an informational message for the user",
+      "success": "The operation was completed successfully",
+"warning": "Pay attention to the warning",
+"error": "An error occurred while performing the operation",
+"noTitle": "Notification without header",
+"longTimer": "This message will be displayed for 10 seconds",
+"noTimer": "This message will not disappear automatically",
+"multiple": {
+"info": "First information message",
+"success": "Second success message",
+"warning": "Third warning",
+"error": "Fourth error message"
+}
+},
+    "titles": {
+"info": "Information",
+      "success": "Success",
+"warning": "Warning",
+"error": "Error",
+"longTimer": "Long timer",
+"noTimer": "No timer",
+      "multiple": {
+"info": "Info 1",
+"success": "Success 2",
+"warning": "Warning 3",
+"error": "Error 4"
+}
+}
+  }
+},
+"fileInput": {
+"DragAndDrop": "Drag files here or click to select",
+"dragActive": "Release files here",
+"acceptedTypes": "Acceptable file types: {types}",
+  "maxSize": "Maximum file size: {size}",
+"actions": {
+"ClearAll": "Clear all",
+"addMore": "Add more files",
+"changeFile": "Edit file",
+    "remove": "Delete file"
+  },
+  "validation": {
+"required": "Please select the file",
+    "fileType": "Invalid file type: {filename}",
+"fileSize": "File is too big: {filename} ({size})"
+},
+  "aria": {
+"RemoveFile": "Delete file"
+  }
+},
+"NumberInput": {
+"validation": {
+"required": "This field must be filled in",
+    "invalidNumber": "Please enter the correct number",
+"MinValue": "The value must be at least {min}",
+"MaxValue": "The value must be no more than {max}"
+}
+},
+"floatInput": {
+"validation": {
+"required": "This field must be filled in",
+    "invalidNumber": "Please enter the correct number",
+"MinValue": "The value must be at least {min}",
+"MaxValue": "The value must be no more than {max}"
+},
+  "display": {
+    "ellipsis": "..."
+  }
+},
+"textInput": {
+  "validation": {
+    "required": "This field must be filled in",
+    "email": "Please enter a valid email address",
+"strongPassword": "The password must contain at least 8 characters, including uppercase and lowercase letters, a number and a special character",
+"basicPassword": "The password must contain at least 8 characters",
+"NumbersOnly": "Please enter only numbers",
+"lettersOnly": "Please enter only letters",
+"url": "Please enter the correct URL",
+"phone": "Please enter the correct phone number",
+    "default": "The entered data does not match the required format",
+"error": "Validation error occurred"
   },
   "notifications": {
-    "examples": {
-      "title": "Notification Examples",
-      "buttons": {
-        "info": "Information",
-        "success": "Success",
-        "warning": "Warning",
-        "error": "Error",
-        "noTitle": "No Title",
-        "longTimer": "Long Timer (10s)",
-        "noTimer": "No Timer",
-        "multiple": "Multiple"
-      },
-      "messages": {
-        "info": "This is an informational message for the user",
-        "success": "Operation completed successfully",
-        "warning": "Please pay attention to this warning",
-        "error": "An error occurred during the operation",
-        "noTitle": "Notification without title",
-        "longTimer": "This message will be displayed for 10 seconds",
-        "noTimer": "This message won't disappear automatically",
-        "multiple": {
-          "info": "First information message",
-          "success": "Second success message",
-          "warning": "Third warning message",
-          "error": "Fourth error message"
-        }
-      },
-      "titles": {
-        "info": "Information",
-        "success": "Success",
-        "warning": "Warning",
-        "error": "Error",
-        "longTimer": "Long Timer",
-        "noTimer": "No Timer",
-        "multiple": {
-          "info": "Info 1",
-          "success": "Success 2",
-          "warning": "Warning 3",
-          "error": "Error 4"
-        }
-      }
-    }
-  },
-  "fileInput": {
-    "dragAndDrop": "Drag and drop files here or click to browse",
-    "dragActive": "Drop files here",
-    "acceptedTypes": "Accepted file types: {types}",
-    "maxSize": "Maximum file size: {size}",
-    "actions": {
-      "clearAll": "Clear All",
-      "addMore": "Add More Files",
-      "changeFile": "Change File",
-      "remove": "Remove file"
-    },
-    "validation": {
-      "required": "Please select a file",
-      "fileType": "File type not allowed: {filename}",
-      "fileSize": "File too large: {filename} ({size})"
-    },
-    "aria": {
-      "removeFile": "Remove file"
-    }
-  },
-  "numberInput": {
-    "validation": {
-      "required": "This field is required",
-      "invalidNumber": "Please enter a valid number",
-      "minValue": "Value must be at least {min}",
-      "maxValue": "Value must be at most {max}"
-    }
-  },
-  "floatInput": {
-    "validation": {
-      "required": "This field is required",
-      "invalidNumber": "Please enter a valid number",
-      "minValue": "Value must be at least {min}",
-      "maxValue": "Value must be at most {max}"
-    },
-    "display": {
-      "ellipsis": "..."
-    }
-  },
-  "textInput": {
-    "validation": {
-      "required": "This field is required",
-      "email": "Please enter a valid email address",
-      "strongPassword": "Password must be at least 8 characters and include uppercase, lowercase, number and special character",
-      "basicPassword": "Password must be at least 8 characters",
-      "numbersOnly": "Please enter numbers only",
-      "lettersOnly": "Please enter letters only",
-      "url": "Please enter a valid URL",
-      "phone": "Please enter a valid phone number",
-      "default": "The input does not match the required format",
-      "error": "Validation error occurred"
-    },
-    "notifications": {
-      "validationError": "Validation Error"
-    }
+"ValidationError": "Validation error"
   }
+}
 }
