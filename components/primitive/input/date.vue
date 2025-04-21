@@ -77,7 +77,7 @@
         >
           <button
             type="button"
-            class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
+            class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover scalable"
             @click="monthYearMode ? previousYear : previousMonth"
             :aria-label="monthYearMode ? t('datePicker.aria.previousYear') : t('datePicker.aria.previousMonth')"
           >
@@ -132,7 +132,7 @@
 
           <button
             type="button"
-            class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
+            class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover scalable"
             @click="monthYearMode ? nextYear : nextMonth"
             :aria-label="monthYearMode ? t('datePicker.aria.nextYear') : t('datePicker.aria.nextMonth')"
           >
@@ -160,7 +160,7 @@
               v-for="(month, index) in monthNames"
               :key="index"
               type="button"
-              class="p-2 rounded-full text-sm flex items-center justify-center transition-colors"
+              class="p-2 rounded-full text-sm flex items-center justify-center transition-colors scalable"
               :class="{
                 'bg-primary text-white': isSelectedMonth(index),
                 'hover:bg-primary/10 text-text-primary dark:text-dark-text-primary': !isSelectedMonth(index),
@@ -194,7 +194,7 @@
                   v-for="(day, index) in calendarDays"
                   :key="index"
                   type="button"
-                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
+                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm scalable"
                   :class="getDayClasses(day, 'start')"
                   :disabled="isDayDisabled(day)"
                   @click="selectDate(day)"
@@ -227,7 +227,7 @@
                   v-for="(day, index) in calendarDaysNextMonth"
                   :key="index"
                   type="button"
-                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
+                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm scalable"
                   :class="getDayClasses(day, 'end')"
                   :disabled="isDayDisabled(day)"
                   @click="selectDate(day)"
@@ -246,7 +246,7 @@
         >
           <button
             type="button"
-            class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
+            class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded scalable"
             @click="monthYearMode ? selectCurrentMonth : selectToday"
           >
             {{ buttonTexts.today }}
@@ -254,14 +254,14 @@
           <button
             v-if="(monthYearMode && selectedDate) || (!monthYearMode && (selectedDate || hoverDate))"
             type="button"
-            class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
+            class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded scalable"
             @click="clearSelection"
           >
             {{ buttonTexts.clear }}
           </button>
           <button
             type="button"
-            class="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary-dark"
+            class="px-3 py-1 text-sm bg-primary text-white rounded hover:bg-primary-dark scalable"
             @click="applySelection"
           >
             {{ buttonTexts.apply }}

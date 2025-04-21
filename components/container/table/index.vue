@@ -75,13 +75,28 @@
                     />
                 </div>
 
+                <!-- Loading state -->
+                <div v-if="loading" class="w-full text-center py-4 text-gray-500">
+                    {{ t('table.loading') }}
+                </div>
+
+                <!-- Error state -->
+                <div v-else-if="error" class="w-full text-center py-4 text-red-500">
+                    {{ t('table.error') }}
+                </div>
+
+                <!-- No data state -->
+                <div v-else-if="!displayData.length" class="w-full text-center py-4 text-gray-500">
+                    {{ t('table.noData') }}
+                </div>
+
                 <!-- Column headers -->
                 <template v-for="column in props.meta.columns" :key="column.key">
                     <div 
                         class="table-header-cell p-2 bg-primary-500 text-text-primary dark:bg-primary-500 dark:text-text-primary flex items-center gap-1 cursor-pointer select-none"
                         @click="column.type !== 'formula' && !isEditMode && handleSort(column.key)"
                         :class="{ 'cursor-not-allowed': column.type === 'formula' || isEditMode }"
-                        :style="isEditMode ? '' : 'grid-column: span 1'"
+                        :title="column.type !== 'formula' && !isEditMode ? getSortTitle(column.key) : ''"
                     >
                         <span class="flex-1">{{ column.title }}</span>
                         <div v-if="column.type !== 'formula' && !isEditMode" class="flex items-center">
@@ -599,6 +614,30 @@ const toolbarTexts = computed(() => ({
 const getValidationMessage = (type: string, params?: any) => {
   return t(`table.validation.${type}`, params)
 }
+
+// Add new computed property for sort titles
+const getSortTitle = (columnKey: string) => {
+    if (props.sorted?.key === columnKey) {
+        return props.sorted.direction === 'asc' 
+            ? t('table.sort.desc') 
+            : t('table.sort.asc')
+    }
+    return t('table.sort.asc')
+}
+
+// Add loading and error states
+const loading = ref(false)
+const error = ref(false)
+
+// Update pagination text
+const paginationText = computed(() => {
+    if (!props.pagination) return ''
+    
+    const start = (props.pagination.currentPage - 1) * props.pagination.itemsPerPage + 1
+    const end = Math.min(start + props.pagination.itemsPerPage - 1, props.pagination.totalItems)
+    
+    return `${t('table.pagination.showing')} ${start} ${t('table.pagination.to')} ${end} ${t('table.pagination.of')} ${props.pagination.totalItems} ${t('table.pagination.entries')}`
+})
 </script>
 
 <style scoped>

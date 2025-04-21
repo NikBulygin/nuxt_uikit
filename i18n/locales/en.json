@@ -65,6 +65,27 @@
       "lettersOnly": "Letters only",
       "url": "Invalid URL format",
       "phone": "Invalid phone format"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "entries": "entries",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page"
+    },
+    "noData": "No data available",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "filters": {
+      "apply": "Apply",
+      "clear": "Clear",
+      "title": "Filters"
+    },
+    "sort": {
+      "asc": "Sort ascending",
+      "desc": "Sort descending"
     }
   },
   "notifications": {
