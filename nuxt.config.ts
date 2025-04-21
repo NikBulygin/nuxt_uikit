@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   ],
   css: ['@/assets/css/main.css'],
   i18n: {
-    langDir: 'i18n/locales',
+    langDir: './locales',
     defaultLocale: 'ru',
     detectBrowserLanguage: {
       useCookie: true,
