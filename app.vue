@@ -1,5 +1,5 @@
 <template>
-  <div :class="theme">
+  <div class="min-h-screen bg-background text-foreground">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -9,9 +9,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useTheme } from '~/composables/useTheme'
 import NotificationContainer from '~/components/notifications/NotificationContainer.vue'
 
-// Для демонстрации темы (опционально)
-const theme = ref('light')
+// Initialize theme
+useTheme()
 </script>
+
+<style>
+body {
+  @apply transition-colors duration-200;
+}
+</style>

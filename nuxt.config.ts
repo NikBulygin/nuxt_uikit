@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/test-utils/module',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/storybook'
+    '@pinia/nuxt'
   ],
   css: ['@/assets/css/main.css'],
   i18n: {

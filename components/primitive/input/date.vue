@@ -67,7 +67,7 @@
       <!-- Datepicker popup -->
       <div
         v-if="showDatepicker"
-        class="absolute z-10 mt-1 bg-white dark:bg-dark-surface shadow-lg rounded-md border border-border dark:border-dark-border"
+        class="absolute z-50 mt-1 bg-white dark:bg-dark-surface shadow-lg rounded-md border border-border dark:border-dark-border"
         :class="[range ? 'w-[32rem]' : 'w-72']"
         @click.stop=""
       >

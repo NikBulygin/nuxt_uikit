@@ -8,7 +8,7 @@ module.exports = {
     './app.vue',
     './error.vue'
   ],
-  darkMode: 'class', // Включаем поддержку темной темы через класс
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -25,7 +25,7 @@ module.exports = {
       colors: {
         // Стандартные цвета для доступа через короткие имена
         primary: {
-          DEFAULT: '#8b5cf6', // Основной цвет (соответствует light-primary-500)
+          DEFAULT: '#8b5cf6',
           50: '#f5f3ff',
           100: '#ede9fe',
           200: '#ddd6fe',
@@ -55,7 +55,7 @@ module.exports = {
             200: '#ddd6fe',
             300: '#c4b5fd',
             400: '#a78bfa',
-            500: '#8b5cf6', // Основной фиолетовый акцент
+            500: '#8b5cf6',
             600: '#7c3aed',
             700: '#6d28d9',
             800: '#5b21b6',
@@ -71,7 +71,7 @@ module.exports = {
           },
           border: '#e5e5e5'
         },
-        // Темная тема (инверсия)
+        // Темная тема
         dark: {
           primary: {
             50: '#2e1065',
@@ -79,23 +79,23 @@ module.exports = {
             200: '#5b21b6',
             300: '#6d28d9',
             400: '#7c3aed',
-            500: '#8b5cf6', // Основной фиолетовый акцент остается тем же
+            500: '#8b5cf6',
             600: '#a78bfa',
             700: '#c4b5fd',
             800: '#ddd6fe',
             900: '#ede9fe',
             950: '#f5f3ff'
           },
-          background: '#0a0a0a',
-          surface: '#171717',
+          background: '#0f172a',
+          surface: '#1e293b',
           text: {
             primary: '#f8fafc',
-            secondary: '#e5e5e5',
-            tertiary: '#a3a3a3'
+            secondary: '#e2e8f0',
+            tertiary: '#cbd5e1'
           },
-          border: '#404040'
+          border: '#334155'
         },
-        // Цвета для уведомлений (одинаковые для обеих тем)
+        // Цвета для уведомлений и действий
         success: {
           light: '#ecfdf5',
           DEFAULT: '#10b981',
@@ -116,6 +116,58 @@ module.exports = {
           DEFAULT: '#ef4444',
           dark: '#991b1b'
         }
+      },
+      // Тени
+      boxShadow: {
+        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)',
+        dark: {
+          sm: '0 1px 2px 0 rgba(0, 0, 0, 0.15)',
+          DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px -1px rgba(0, 0, 0, 0.2)',
+          md: '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2)',
+          lg: '0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.2)',
+          xl: '0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
+          inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.15)'
+        }
+      },
+      // Анимации
+      animation: {
+        'fade-in': 'fadeIn 0.2s ease-in-out',
+        'fade-out': 'fadeOut 0.2s ease-in-out',
+        'slide-in': 'slideIn 0.2s ease-in-out',
+        'slide-out': 'slideOut 0.2s ease-in-out'
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' }
+        },
+        slideIn: {
+          '0%': { transform: 'translateY(-10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        },
+        slideOut: {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-10px)', opacity: '0' }
+        }
+      },
+      // Медиа-запросы
+      screens: {
+        'xs': '475px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        'dark': {'raw': '(prefers-color-scheme: dark)'}
       }
     }
   },
