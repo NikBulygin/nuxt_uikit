@@ -11,11 +11,7 @@
     </label>
 
     <!-- Date input wrapper -->
-<<<<<<< HEAD
-    <div class="relative">
-=======
     <div class="absolute">
->>>>>>> 18757a6 (Add table form)
       <div
         :id="id"
         class="flex items-center border rounded-md overflow-hidden focus-within:ring-2"
@@ -72,7 +68,7 @@
       <div
         v-if="showDatepicker"
         class="absolute z-10 mt-1 bg-white dark:bg-dark-surface shadow-lg rounded-md border border-border dark:border-dark-border"
-        :class="[range ? 'w-[32rem]' : 'w-72']"
+        :class="[range ? 'w-[32rem]' : monthYearMode ? 'w-64' : 'w-72']"
         @click.stop=""
       >
         <!-- Datepicker header -->
@@ -82,7 +78,7 @@
           <button
             type="button"
             class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
-            @click="previousMonth"
+            @click="monthYearMode ? previousYear : previousMonth"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,39 +97,42 @@
           </button>
 
           <div class="flex items-center gap-2">
-            <!-- Month select -->
-            <select
-              v-model="currentMonth"
-              class="bg-transparent py-1 px-2 rounded border border-transparent hover:border-border dark:hover:border-dark-border focus:outline-none"
-            >
-              <option
-                v-for="(month, idx) in monthNames"
-                :key="idx"
-                :value="idx"
+            <span v-if="monthYearMode" class="text-lg font-medium">{{ currentYear }}</span>
+            <template v-else>
+              <!-- Month select -->
+              <select
+                v-model="currentMonth"
+                class="bg-transparent py-1 px-2 rounded border border-transparent hover:border-border dark:hover:border-dark-border focus:outline-none"
               >
-                {{ month }}
-              </option>
-            </select>
+                <option
+                  v-for="(month, idx) in monthNames"
+                  :key="idx"
+                  :value="idx"
+                >
+                  {{ month }}
+                </option>
+              </select>
 
-            <!-- Year select -->
-            <select
-              v-model="currentYear"
-              class="bg-transparent py-1 px-2 rounded border border-transparent hover:border-border dark:hover:border-dark-border focus:outline-none"
-            >
-              <option
-                v-for="year in availableYears"
-                :key="year"
-                :value="year"
+              <!-- Year select -->
+              <select
+                v-model="currentYear"
+                class="bg-transparent py-1 px-2 rounded border border-transparent hover:border-border dark:hover:border-dark-border focus:outline-none"
               >
-                {{ year }}
-              </option>
-            </select>
+                <option
+                  v-for="year in availableYears"
+                  :key="year"
+                  :value="year"
+                >
+                  {{ year }}
+                </option>
+              </select>
+            </template>
           </div>
 
           <button
             type="button"
             class="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-dark-hover"
-            @click="nextMonth"
+            @click="monthYearMode ? nextYear : nextMonth"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,66 +152,88 @@
         </div>
 
         <div class="flex">
-          <!-- First calendar (or only calendar in single mode) -->
-          <div class="p-2 flex-1">
-            <!-- Day of week headers -->
-            <div class="grid grid-cols-7 mb-1">
-              <div
-                v-for="day in dayNames"
-                :key="day"
-                class="text-center text-xs font-medium text-text-tertiary dark:text-dark-text-tertiary py-1"
-              >
-                {{ day }}
-              </div>
-            </div>
-
-            <!-- Calendar days -->
-            <div class="grid grid-cols-7 gap-1">
-              <button
-                v-for="(day, index) in calendarDays"
-                :key="index"
-                type="button"
-                class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
-                :class="getDayClasses(day, 'start')"
-                :disabled="isDayDisabled(day)"
-                @click="selectDate(day)"
-                @mouseover="onDayHover(day)"
-              >
-                {{ day.getDate() }}
-              </button>
-            </div>
+          <!-- Month grid for month-year mode -->
+          <div v-if="monthYearMode" class="p-2 grid grid-cols-4 gap-2 w-full">
+            <button
+              v-for="(month, index) in monthNames"
+              :key="index"
+              type="button"
+              class="p-2 rounded-full text-sm flex items-center justify-center transition-colors"
+              :class="{
+                'bg-primary text-white': isSelectedMonth(index),
+                'hover:bg-primary/10 text-text-primary dark:text-dark-text-primary': !isSelectedMonth(index),
+                'opacity-50 cursor-not-allowed': isDisabledMonth(index)
+              }"
+              :disabled="isDisabledMonth(index)"
+              @click="selectMonth(index)"
+            >
+              {{ month.slice(0, 3) }}
+            </button>
           </div>
 
-          <!-- Second calendar for range mode -->
-          <div
-            v-if="range"
-            class="p-2 flex-1 border-l border-border dark:border-dark-border"
-          >
-            <!-- Day of week headers for second month -->
-            <div class="grid grid-cols-7 mb-1">
-              <div
-                v-for="day in dayNames"
-                :key="day"
-                class="text-center text-xs font-medium text-text-tertiary dark:text-dark-text-tertiary py-1"
-              >
-                {{ day }}
+          <!-- Regular calendar for date mode -->
+          <div v-else>
+            <!-- First calendar -->
+            <div class="p-2 flex-1">
+              <!-- Day of week headers -->
+              <div class="grid grid-cols-7 mb-1">
+                <div
+                  v-for="day in dayNames"
+                  :key="day"
+                  class="text-center text-xs font-medium text-text-tertiary dark:text-dark-text-tertiary py-1"
+                >
+                  {{ day }}
+                </div>
+              </div>
+
+              <!-- Calendar days -->
+              <div class="grid grid-cols-7 gap-1">
+                <button
+                  v-for="(day, index) in calendarDays"
+                  :key="index"
+                  type="button"
+                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
+                  :class="getDayClasses(day, 'start')"
+                  :disabled="isDayDisabled(day)"
+                  @click="selectDate(day)"
+                  @mouseover="onDayHover(day)"
+                >
+                  {{ day.getDate() }}
+                </button>
               </div>
             </div>
 
-            <!-- Calendar days for second month -->
-            <div class="grid grid-cols-7 gap-1">
-              <button
-                v-for="(day, index) in calendarDaysNextMonth"
-                :key="index"
-                type="button"
-                class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
-                :class="getDayClasses(day, 'end')"
-                :disabled="isDayDisabled(day)"
-                @click="selectDate(day)"
-                @mouseover="onDayHover(day)"
-              >
-                {{ day.getDate() }}
-              </button>
+            <!-- Second calendar for range mode -->
+            <div
+              v-if="range"
+              class="p-2 flex-1 border-l border-border dark:border-dark-border"
+            >
+              <!-- Day of week headers for second month -->
+              <div class="grid grid-cols-7 mb-1">
+                <div
+                  v-for="day in dayNames"
+                  :key="day"
+                  class="text-center text-xs font-medium text-text-tertiary dark:text-dark-text-tertiary py-1"
+                >
+                  {{ day }}
+                </div>
+              </div>
+
+              <!-- Calendar days for second month -->
+              <div class="grid grid-cols-7 gap-1">
+                <button
+                  v-for="(day, index) in calendarDaysNextMonth"
+                  :key="index"
+                  type="button"
+                  class="h-8 w-8 flex items-center justify-center rounded-full text-sm"
+                  :class="getDayClasses(day, 'end')"
+                  :disabled="isDayDisabled(day)"
+                  @click="selectDate(day)"
+                  @mouseover="onDayHover(day)"
+                >
+                  {{ day.getDate() }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -224,20 +245,12 @@
           <button
             type="button"
             class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
-            @click="selectToday"
+            @click="monthYearMode ? selectCurrentMonth : selectToday"
           >
-            Today
+            {{ monthYearMode ? 'Current' : 'Today' }}
           </button>
           <button
-            v-if="range && selectedStartDate && hoverDate"
-            type="button"
-            class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
-            @click="clearSelection"
-          >
-            Clear
-          </button>
-          <button
-            v-else-if="!range && (selectedDate || hoverDate)"
+            v-if="(monthYearMode && selectedDate) || (!monthYearMode && (selectedDate || hoverDate))"
             type="button"
             class="px-3 py-1 text-sm text-primary hover:bg-primary/10 rounded"
             @click="clearSelection"
@@ -307,6 +320,7 @@ interface DateProps {
   validateOnInput?: boolean
   helperText?: string
   showNotificationOnError?: boolean
+  monthYearMode?: boolean
 }
 
 const props = withDefaults(defineProps<DateProps>(), {
@@ -316,7 +330,8 @@ const props = withDefaults(defineProps<DateProps>(), {
   required: false,
   disabled: false,
   validateOnInput: false,
-  showNotificationOnError: false
+  showNotificationOnError: false,
+  monthYearMode: false
 })
 
 const emit = defineEmits([
@@ -467,6 +482,13 @@ function formatDate(date: Date): string {
   const month = (date.getMonth() + 1).toString().padStart(2, '0')
   const year = date.getFullYear()
 
+  if (props.monthYearMode) {
+    return format
+      .replace('DD', '01')
+      .replace('MM', month)
+      .replace('YYYY', year.toString())
+  }
+
   return format
     .replace('DD', day)
     .replace('MM', month)
@@ -480,7 +502,16 @@ function parseDate(dateStr: string): Date | null {
   const format = props.dateFormat || 'MM/DD/YYYY'
   let day, month, year
 
-  if (
+  if (props.monthYearMode) {
+    const parts = dateStr.split(/[-/.]/)
+    if (parts.length === 2) {
+      month = parseInt(parts[0]) - 1
+      year = parseInt(parts[1])
+      day = 1
+    } else {
+      return null
+    }
+  } else if (
     format.indexOf('DD') !== -1 &&
     format.indexOf('MM') !== -1 &&
     format.indexOf('YYYY') !== -1
@@ -538,7 +569,7 @@ function parseDate(dateStr: string): Date | null {
   if (
     date.getFullYear() !== year ||
     date.getMonth() !== month ||
-    date.getDate() !== day
+    (props.monthYearMode ? false : date.getDate() !== day)
   ) {
     return null
   }
@@ -761,21 +792,41 @@ function clearSelection() {
 function selectDate(day: Date) {
   if (isDayDisabled(day)) return
 
-  if (props.range) {
-    if (!selectedStartDate.value || selectedEndDate.value) {
-      selectedStartDate.value = day
-      selectedEndDate.value = null
-    } else {
-      if (day < selectedStartDate.value) {
-        selectedEndDate.value = selectedStartDate.value
-        selectedStartDate.value = day
+  if (props.monthYearMode) {
+    const selectedDate = new Date(day.getFullYear(), day.getMonth(), 1)
+    if (props.range) {
+      if (!selectedStartDate.value || selectedEndDate.value) {
+        selectedStartDate.value = selectedDate
+        selectedEndDate.value = null
       } else {
-        selectedEndDate.value = day
+        if (selectedDate < selectedStartDate.value) {
+          selectedEndDate.value = selectedStartDate.value
+          selectedStartDate.value = selectedDate
+        } else {
+          selectedEndDate.value = selectedDate
+        }
       }
+    } else {
+      selectedDate.value = selectedDate
+      applySelection()
     }
   } else {
-    selectedDate.value = day
-    applySelection() // Close the datepicker in single date mode
+    if (props.range) {
+      if (!selectedStartDate.value || selectedEndDate.value) {
+        selectedStartDate.value = day
+        selectedEndDate.value = null
+      } else {
+        if (day < selectedStartDate.value) {
+          selectedEndDate.value = selectedStartDate.value
+          selectedStartDate.value = day
+        } else {
+          selectedEndDate.value = day
+        }
+      }
+    } else {
+      selectedDate.value = day
+      applySelection()
+    }
   }
 
   updateModelValue()
@@ -996,8 +1047,45 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
 })
-<<<<<<< HEAD
+
+// Add new methods for month-year mode
+function previousYear() {
+  currentYear.value--
+}
+
+function nextYear() {
+  currentYear.value++
+}
+
+function isSelectedMonth(monthIndex: number): boolean {
+  if (!selectedDate.value) return false
+  return selectedDate.value.getMonth() === monthIndex && 
+         selectedDate.value.getFullYear() === currentYear.value
+}
+
+function isDisabledMonth(monthIndex: number): boolean {
+  if (!minDate.value && !maxDate.value) return false
+
+  const firstDayOfMonth = new Date(currentYear.value, monthIndex, 1)
+  const lastDayOfMonth = new Date(currentYear.value, monthIndex + 1, 0)
+
+  if (minDate.value && lastDayOfMonth < minDate.value) return true
+  if (maxDate.value && firstDayOfMonth > maxDate.value) return true
+
+  return false
+}
+
+function selectMonth(monthIndex: number) {
+  if (isDisabledMonth(monthIndex)) return
+  
+  const newDate = new Date(currentYear.value, monthIndex, 1)
+  selectedDate.value = newDate
+  applySelection()
+}
+
+function selectCurrentMonth() {
+  const now = new Date()
+  selectMonth(now.getMonth())
+  currentYear.value = now.getFullYear()
+}
 </script>
-=======
-</script>
->>>>>>> 18757a6 (Add table form)
