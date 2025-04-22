@@ -5,42 +5,28 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/i18n',
     '@nuxt/test-utils/module',
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/storybook'
+    '@nuxtjs/tailwindcss'
   ],
   css: ['@/assets/css/main.css'],
   i18n: {
-    langDir: './i18n/locales',
+    bundle: {
+      optimizeTranslationDirective: false
+    },
+    strategy: 'no_prefix',
     defaultLocale: 'ru',
+    baseUrl: import.meta.env.DEV
+      ? 'http://localhost:3300/'
+      : 'https://core.mfgm.kz/',
+    lazy: true,
+    locales: [
+      { code: 'en', name: 'English', language: 'en', file: 'en.ts' },
+      { code: 'kz', name: 'Қазақ', language: 'kk', file: 'kz.ts' },
+      { code: 'ru', name: 'Русский', language: 'ru', file: 'ru.ts' }
+    ],
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      alwaysRedirect: true,
-      cookieSecure: process.env.NODE_ENV === 'production'
-    },
-    locales: [
-      {
-        code: 'ru',
-        iso: 'ru-RU',
-        name: 'Русский',
-        file: 'ru.json'
-      },
-      {
-        code: 'kz',
-        iso: 'kk-KZ',
-        name: 'Қазақша',
-        file: 'kz.json'
-      },
-      {
-        code: 'en',
-        iso: 'en-US',
-        name: 'English',
-        file: 'en.json'
-      }
-    ],
-    strategy: 'prefix_and_default',
-    lazy: true,
-    skipSettingLocaleOnNavigate: false
+      cookieKey: 'i18nRed',
+      redirectOn: 'root'
+    }
   }
 })
